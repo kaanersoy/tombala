@@ -3,7 +3,7 @@
     <Header></Header>
     <div class="container">
       <Description></Description>
-      <div class="form-wrapper" v-if="!isGiveawaySuccesfull">
+      <div class="form-wrapper" v-show="!isGiveawaySuccesfull">
         <form @submit.prevent="getComments(getVideoID())" autocomplete="off">
           <div class="form-group">
             <label>Youtube Video URL</label>
@@ -34,14 +34,17 @@
           </div>
           <div class="form-group" v-if="isKeywordBasedSearchActive">
             <label>Enter your <span>keyword</span> <small>(example: IMHERE)</small></label>
-            <input type="text">
+            <input type="text" v-model="keyword">
           </div>
           <div class="button-container">
             <button>Giveaway Time!</button>
           </div>
         </form>
       </div>
-      <GiveawayWinnersList></GiveawayWinnersList>
+      <div class="go-back-button" v-if="isGiveawaySuccesfull">
+        <button @click="giveAwayToggler">Go back -></button>
+      </div>
+      <GiveawayWinnersList v-if="isGiveawaySuccesfull" :winners="giveawayWinners"></GiveawayWinnersList>
     </div>
   </div>
 </template>
@@ -61,6 +64,7 @@ export default {
   data: function(){
     return{
       isKeywordBasedSearchActive: false,
+      keyword: null,
       comments: null,
       videoInfo: null,
       videoUrl: null,
@@ -112,12 +116,30 @@ export default {
         if(!uniqueUserComments.includes(userId)) 
           uniqueUserComments.push(el);
       });
-      let giveawayWinners = []
-      for (let i = 0; i < this.giveAwaySize; i++) {
+      let giveawayWinners = [];
+      let tryCounter = 0;
+      while (giveawayWinners.length < this.giveAwaySize) {
         const randomIndex = parseInt(Math.random() * uniqueUserComments.length);
-        giveawayWinners.push(uniqueUserComments[randomIndex]);
+        if(!giveawayWinners.includes(uniqueUserComments[randomIndex])){
+          if(this.isKeywordBasedSearchActive){
+            const usersComment = uniqueUserComments[randomIndex].snippet.topLevelComment.snippet.textDisplay.toLowerCase();
+            if(usersComment.includes(this.keyword.toLowerCase())){
+              giveawayWinners.push(uniqueUserComments[randomIndex]);
+            }
+            tryCounter++;
+          }
+          else{
+            giveawayWinners.push(uniqueUserComments[randomIndex]);
+          }
+        }
+        if(tryCounter > this.comments.length) break; 
       }
+      
       this.giveawayWinners = giveawayWinners;
+      this.giveAwayToggler();
+    },
+    giveAwayToggler: function(){
+    this.isGiveawaySuccesfull = !this.isGiveawaySuccesfull;
     }
   }
 }
@@ -136,6 +158,9 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+img{
+  vertical-align: middle;
 }
 *::before, *::after{
   box-sizing: inherit;
