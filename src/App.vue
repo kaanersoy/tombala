@@ -4,16 +4,16 @@
     <div class="container">
       <Description></Description>
       <div class="form-wrapper">
-        <form @submit.prevent="" autocomplete="off">
+        <form @submit.prevent="apiConnection" autocomplete="off">
           <div class="form-group">
             <label>Youtube Video URL</label>
-            <input type="url" required="required">
+            <input type="text">
           </div>
           <div class="video-display">
           </div>
           <div class="form-group">
             <label>Size of <span>Giveaway</span></label>
-            <input type="number" required="required">
+            <input type="number">
           </div>
           <div class="checkbox-group">
             <input type="checkbox" v-model="isKeywordBasedSearchActive"  id="keyword-checkbox" name="keyword-checkbox">
@@ -38,6 +38,7 @@
 <script>
 import Header from './components/Header';
 import Description from './components/Description';
+import axios from 'axios';
 export default {
   name: 'App',
   components: {
@@ -46,7 +47,19 @@ export default {
   },
   data: function(){
     return{
-      isKeywordBasedSearchActive: false
+      isKeywordBasedSearchActive: false,
+      comments: null
+    }
+  },
+  methods:{
+    apiConnection: async function(){
+      const apiKey = process.env.VUE_APP_YOUTUBE_API;
+      axios
+      .get(`https://www.googleapis.com/youtube/v3/commentThreads?key=${apiKey}&textFormat=plainText&part=snippet&videoId=F-DNIiYyeio&maxResults=100`)
+      .then(res => {
+        console.log(res);
+        this.comments = res.data.items;
+      })
     }
   }
 }
