@@ -4,6 +4,9 @@
     <Header></Header>
     <div class="container">
       <Description></Description>
+      <div class="error-label" v-if="errorMessage">
+        <p>{{errorMessage}}</p>
+      </div>
       <div class="form-wrapper" v-show="!isGiveawaySuccesfull">
         <form @submit.prevent="getComments(getVideoID())" autocomplete="off">
           <div class="form-group">
@@ -94,7 +97,8 @@ export default {
       isGiveawaySuccesfull: false,
       uniqueUserComments: null,
       giveawayWinners: [],
-      isPreloaderActive: false
+      isPreloaderActive: false,
+      errorMessage: null
     }
   },
   methods:{
@@ -108,29 +112,40 @@ export default {
           })
           this.isUrlAvailable = true;
       }catch(err){
+        console.log(err);
         this.isUrlAvailable = false;
       }
     },
     getComments: async function(videoId){
-      const apiKey = process.env.VUE_APP_YOUTUBE_API;
-      this.isPreloaderActive = true;
-      axios
-        .get(`https://www.googleapis.com/youtube/v3/commentThreads?key=${apiKey}&textFormat=plainText&part=snippet&videoId=${videoId}&maxResults=100`)
-        .then(res => {
-          this.comments = res.data.items;
-          this.createGiveaway(this.comments);
-          this.isPreloaderActive = false;
-        })
+      if(videoId == false){
+       this.errorMessage = "Please enter a valid URL!"; 
+      }else{
+        this.errorMessage = null;
+        const apiKey = process.env.VUE_APP_YOUTUBE_API;
+        try{
+          this.isPreloaderActive = true;
+          axios
+            .get(`https://www.googleapis.com/youtube/v3/commentThreads?key=${apiKey}&textFormat=plainText&part=snippet&videoId=${videoId}&maxResults=100`)
+            .then(res => {
+              this.comments = res.data.items;
+              this.createGiveaway(this.comments);
+              this.isPreloaderActive = false;
+            })
+        }catch(err){
+          console.log(err);
+        }
+      }
     },
     getVideoID: function(){
       const urlString = this.videoUrl;
-      try{
-        const url = new URL(urlString);
+      const url = new URL(urlString);
+      if(!url.searchParams.get('v')){
+        return false;
+      }else{
+        this.errorMessage = null;
         const videoID = url.searchParams.get('v');
         this.getVideoInfo(videoID);
         return videoID;
-      }catch{
-        this.isUrlAvailable = false;
       }
     },
     createGiveaway: function(comments){
@@ -202,6 +217,16 @@ body {
   margin: 0 auto;
   margin-bottom: 50px;
 }
+.container .error-label{
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  background-color: #f3acac;
+  margin: 15px 0;
+  border-radius: 15px;
+  font-size: 15px;
+}
+.container .error-label p{}
 .container .go-back-button{
   margin: 15px 0;
 }
