@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div id="app">
+    <Preloader v-if="isPreloaderActive"></Preloader>
     <Header></Header>
     <div class="container">
       <Description></Description>
@@ -23,7 +24,7 @@
           </div>
           <div class="form-group">
             <label>Size of <span>Giveaway</span></label>
-            <input type="number" v-model="giveAwaySize" required="required">
+            <input type="number" v-model="giveAwaySize" min="1" max="20" required="required">
           </div>
           <div class="checkbox-group">
             <input type="checkbox" v-model="isKeywordBasedSearchActive" id="keyword-checkbox" name="keyword-checkbox">
@@ -37,15 +38,31 @@
             <input type="text" v-model="keyword">
           </div>
           <div class="button-container">
-            <button>Giveaway Time!</button>
+            <button>tombala!</button>
           </div>
         </form>
       </div>
       <div class="go-back-button" v-if="isGiveawaySuccesfull">
-        <button @click="giveAwayToggler">Go back -></button>
+        <button @click="giveAwayToggler">
+          <div class="box">
+            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              width="459px" height="459px" viewBox="0 0 459 459" style="enable-background:new 0 0 459 459;" xml:space="preserve">
+              <g>
+                <g id="reply">
+                  <path d="M178.5,140.25v-102L0,216.75l178.5,178.5V290.7c127.5,0,216.75,40.8,280.5,130.05C433.5,293.25,357,165.75,178.5,140.25z"
+                    />
+                </g>
+              </g>
+            </svg>
+          </div>
+          <div class="box">
+            Go back
+          </div>
+        </button>
       </div>
       <GiveawayWinnersList v-if="isGiveawaySuccesfull" :winners="giveawayWinners"></GiveawayWinnersList>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -53,13 +70,17 @@
 import GiveawayWinnersList from './components/GiveawayWinnersList';
 import Header from './components/Header';
 import Description from './components/Description';
+import Preloader from './components/Preloader';
+import Footer from './components/Footer';
 import axios from 'axios';
 export default {
   name: 'App',
   components: {
     Header,
     Description,
-    GiveawayWinnersList
+    GiveawayWinnersList,
+    Preloader,
+    Footer
   },
   data: function(){
     return{
@@ -73,6 +94,7 @@ export default {
       isGiveawaySuccesfull: false,
       uniqueUserComments: null,
       giveawayWinners: [],
+      isPreloaderActive: false
     }
   },
   methods:{
@@ -91,11 +113,13 @@ export default {
     },
     getComments: async function(videoId){
       const apiKey = process.env.VUE_APP_YOUTUBE_API;
+      this.isPreloaderActive = true;
       axios
         .get(`https://www.googleapis.com/youtube/v3/commentThreads?key=${apiKey}&textFormat=plainText&part=snippet&videoId=${videoId}&maxResults=100`)
         .then(res => {
           this.comments = res.data.items;
           this.createGiveaway(this.comments);
+          this.isPreloaderActive = false;
         })
     },
     getVideoID: function(){
@@ -110,13 +134,14 @@ export default {
       }
     },
     createGiveaway: function(comments){
-      let uniqueUserComments = []
+      let uniqueUserComments = [];
       comments.forEach(el => {
         const userId = el.snippet.topLevelComment.snippet.authorChannelId;
         if(!uniqueUserComments.includes(userId)) 
           uniqueUserComments.push(el);
       });
       let giveawayWinners = [];
+      
       let tryCounter = 0;
       while (giveawayWinners.length < this.giveAwaySize) {
         const randomIndex = parseInt(Math.random() * uniqueUserComments.length);
@@ -175,9 +200,26 @@ body {
 .container{
   width: 800px;
   margin: 0 auto;
+  margin-bottom: 50px;
 }
+.container .go-back-button{
+  margin: 15px 0;
+}
+.container .go-back-button button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-radius: 20px;
+  border: 5px solid #f3acac;
+  padding: 10px 0;
+  background-color: rgba(var(--main-color), 0.8);
+  color: #fff;
+}
+.container .go-back-button button .box{}
+.container .go-back-button button .box:last-child{margin-left: 15px;}
+.container .go-back-button button .box svg{ fill: #fff; width: 25px;height: 25px;}
 .container .form-wrapper form{
-  padding: 15px;
   display: block;
 }
 .container .form-wrapper form .video-info{
@@ -284,11 +326,11 @@ body {
   border: none;
   box-shadow: 0 0 50px rgb(200, 200, 200);
   color: #fff;
-  padding: 12px 0;
+  font-size: 18px;
+  padding: 15px 18px;
   border-radius: 10px;
   background-color: rgb(var(--main-color));
   display: block;
-  width: 18%;
   margin-left: auto;
 }
 </style>

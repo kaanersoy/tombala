@@ -40,6 +40,9 @@ export default {
   font-size: 30px;
   text-align: center;
   color: rgb(var(--main-color));
+  padding: 12px 0;
+  margin: 12px 0;
+  border-bottom: 2px solid rgba(var(--main-color), 0.3);
 }
 .giveaway-information-wrapper .giveaway-information-content .giveaway-winner-row{
   display: flex;

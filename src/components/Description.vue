@@ -23,7 +23,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 30px 0;
+  margin: 50px 0;
 }
 .page-description .col:last-child{
   margin-left: 20px;
