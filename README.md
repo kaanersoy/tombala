@@ -4,7 +4,7 @@
 ![tombala | LOGO](https://tombala-delta.vercel.app/favicons/og-image.png)
 
   
-It is a URL shortener to get shortened URLs.
+Tombala is a Giveaway machine. It allows you to create giveaways using Youtube comments.
 
 ## Used Tecnologies
 
