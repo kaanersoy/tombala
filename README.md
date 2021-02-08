@@ -1,5 +1,5 @@
 
-# tombala | URL Shortener
+# tombala | Giveaway machine powered by Youtube API
 
 ![tombala | LOGO](https://tombala-delta.vercel.app/favicons/og-image.png)
 
