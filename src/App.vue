@@ -201,6 +201,7 @@ export default {
 :root{
   /* #e7406c */
   --main-color: 231, 64, 108;
+  /* #edf0f1 */
   --body-bg: 237, 240, 241;
   /* #aaaaaa */
   --contrasted-text: 170, 170, 170;
