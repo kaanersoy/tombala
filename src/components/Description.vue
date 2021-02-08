@@ -6,7 +6,8 @@
     <div class="col">
       <p>
         <span>tombala</span> is a Giveaway machine.<br>
-        It allows you to create giveaways using <span>Youtube</span> comments.
+        It allows you to create giveaways using <span>Youtube</span> comments.<br>
+        <small>(It is a free to use API so it accepts first 100 comments :/)</small>
       </p>
     </div>
   </div>
@@ -42,5 +43,9 @@ export default {
   color: rgb(var(--main-color));
   font-weight: bold;
   font-size: 22px;
+}
+.page-description .col p small{
+  color: rgb(var(--contrasted-text));
+  font-size: 12px;
 }
 </style>

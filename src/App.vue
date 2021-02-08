@@ -93,7 +93,7 @@ export default {
       videoInfo: null,
       videoUrl: null,
       isUrlAvailable: null,
-      giveAwaySize: 0,
+      giveAwaySize: 1,
       isGiveawaySuccesfull: false,
       uniqueUserComments: null,
       giveawayWinners: [],
@@ -117,8 +117,13 @@ export default {
       }
     },
     getComments: async function(videoId){
+      if(this.videoUrl == null || this.videoUrl == ""){
+        this.errorMessage = "URL can't be empty";
+        return false;
+      }
       if(videoId == false){
-       this.errorMessage = "Please enter a valid URL!"; 
+        this.errorMessage = "Please enter a valid URL!";
+        return false; 
       }else{
         this.errorMessage = null;
         const apiKey = process.env.VUE_APP_YOUTUBE_API;
@@ -138,14 +143,21 @@ export default {
     },
     getVideoID: function(){
       const urlString = this.videoUrl;
-      const url = new URL(urlString);
-      if(!url.searchParams.get('v')){
-        return false;
-      }else{
-        this.errorMessage = null;
-        const videoID = url.searchParams.get('v');
-        this.getVideoInfo(videoID);
-        return videoID;
+      try{
+        let url = new URL(urlString);
+        if(!url.searchParams.get('v')){
+          return false;
+        }else{
+          this.errorMessage = null;
+          const videoID = url.searchParams.get('v');
+          this.getVideoInfo(videoID);
+          return videoID;
+        }
+      }catch{
+        if(this.videoUrl == null || this.videoUrl == ""){
+          this.errorMessage = "URL can't be empty";
+          return false;
+        }
       }
     },
     createGiveaway: function(comments){
@@ -156,7 +168,6 @@ export default {
           uniqueUserComments.push(el);
       });
       let giveawayWinners = [];
-      
       let tryCounter = 0;
       while (giveawayWinners.length < this.giveAwaySize) {
         const randomIndex = parseInt(Math.random() * uniqueUserComments.length);

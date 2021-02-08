@@ -1,7 +1,7 @@
 <template>
   <div class="giveaway-information-wrapper" id="giveaway-winners">
     <div class="giveaway-information-header">
-      <h5>Winner(s)</h5>
+      <h5><span>tombala</span> winner(s)</h5>
     </div>
     <div class="giveaway-information-content">
       <div class="giveaway-winner-row" v-for="winner in winners" :key="winner.id">
@@ -37,12 +37,14 @@ export default {
 .giveaway-information-wrapper{}
 .giveaway-information-wrapper .giveaway-information-header{}
 .giveaway-information-wrapper .giveaway-information-header h5{
-  font-size: 30px;
+  font-size: 25px;
   text-align: center;
-  color: rgb(var(--main-color));
   padding: 12px 0;
   margin: 12px 0;
   border-bottom: 2px solid rgba(var(--main-color), 0.3);
+}
+.giveaway-information-wrapper .giveaway-information-header h5 span{
+  color: rgb(var(--main-color));
 }
 .giveaway-information-wrapper .giveaway-information-content .giveaway-winner-row{
   display: flex;
