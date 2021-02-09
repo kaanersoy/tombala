@@ -229,6 +229,11 @@ body {
   margin: 0 auto;
   margin-bottom: 50px;
 }
+@media only screen and (max-width: 414px) {
+  .container{
+    width: 80%;
+  }
+}
 .container .error-label{
   width: 100%;
   padding: 20px;
@@ -286,6 +291,17 @@ body {
 .container .form-wrapper form .video-info .box small span{
   color: rgb(var(--main-color));
 }
+@media only screen and (max-width: 414px) {
+  .container .form-wrapper form .video-info{
+    align-items: flex-start;
+    margin: 20px 0;
+  }
+  .container .form-wrapper form .video-info .box img{
+    width: 65px;
+    height: 50px;
+  }
+}
+
 .container .form-wrapper form .form-group{
   margin-bottom: 15px;
 }

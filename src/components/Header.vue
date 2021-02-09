@@ -34,4 +34,9 @@ export default {
       letter-spacing: 5px;
       font-size: 16px;
     }
+    @media only screen and (max-width: 414px) {
+      header{
+        width: 100%;
+      }
+    }
 </style>

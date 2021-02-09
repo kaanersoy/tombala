@@ -30,6 +30,6 @@ Tombala is a Giveaway machine. It allows you to create giveaways using Youtube c
 
 ## TODO List
 
+ - [X] Fix responsive design
  - [ ] Build a Restfull API for secure API key.
- - [ ] Fix responsive design
  - [ ]  ... 

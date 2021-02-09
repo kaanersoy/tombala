@@ -26,6 +26,7 @@ export default {
   justify-content: center;
   margin: 50px 0;
 }
+
 .page-description .col:last-child{
   margin-left: 20px;
 }
@@ -36,6 +37,18 @@ export default {
   width: 1em;
   height: 1em;
 }
+@media only screen and (max-width: 414px) {
+  .page-description{
+    display: block;
+  }
+  .page-description .col:last-child{
+    margin-left: 0;
+  }
+  .page-description .col img{
+    display: none;
+  }
+}
+
 .page-description .col p{
   font-size: 18px;
 }
