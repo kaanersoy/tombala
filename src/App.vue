@@ -229,9 +229,12 @@ body {
   margin: 0 auto;
   margin-bottom: 50px;
 }
-@media only screen and (max-width: 414px) {
+@media only screen and (max-width: 1024px) {
   .container{
     width: 80%;
+  }
+  .container .form-wrapper form .checkbox-group label{
+    flex-shrink: 0;
   }
 }
 .container .error-label{
